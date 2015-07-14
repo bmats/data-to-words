@@ -17,7 +17,7 @@ func TestNewDictionaryCustom(t *testing.T) {
 	}
 	defer os.Remove(customDictPath)
 
-	dict, err := newDictionaryCustom()
+	dict, err := newDictionaryFile(customDictPath)
 	if err != nil {
 		t.Errorf("err (%s) != nil", err)
 	}
@@ -33,7 +33,7 @@ func TestNewDictionarySystem(t *testing.T) {
 		return
 	}
 
-	dict, err := newDictionarySystem()
+	dict, err := newDictionaryFile(systemDictPath)
 	if err != nil {
 		t.Errorf("err (%s) != nil", err)
 	}
@@ -56,7 +56,7 @@ func TestNewDictionaryDownload(t *testing.T) {
 		t.Error("len(dict.words) == 0")
 	}
 
-	customDict, err := newDictionaryCustom()
+	customDict, err := newDictionaryFile(customDictPath)
 	if err != nil {
 		t.Errorf("custom err (%s) != nil", err)
 	}

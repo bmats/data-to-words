@@ -12,13 +12,20 @@ type Dictionary struct {
 	seed    int
 }
 
+const (
+	customDictPath string = "dictionary.txt"
+	systemDictPath string = "/usr/share/dict/words"
+)
+
 func NewDictionary() (*Dictionary, error) {
-	dict, err := newDictionaryCustom()
+	// Load a dictionary from the custom dictionary file
+	dict, err := newDictionaryFile(customDictPath)
 	if err == nil {
 		return dict, nil
 	}
 
-	dict, err = newDictionarySystem()
+	// Load a dictionary from the *nix builtin dictionary
+	dict, err = newDictionaryFile(systemDictPath)
 	if err == nil {
 		return dict, nil
 	}

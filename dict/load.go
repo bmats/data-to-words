@@ -8,42 +8,22 @@ import (
 	"os"
 )
 
-const (
-	customDictPath string = "dictionary.txt"
-	onlineDictUrl  string = "https://gist.github.com/bmats/9a946845ad065558d4d6/raw/4be557ed63be643afaf898197f7dcbabb37630f1/words.txt"
-)
+const onlineDictUrl string = "https://gist.github.com/bmats/9a946845ad065558d4d6/raw/4be557ed63be643afaf898197f7dcbabb37630f1/words.txt"
 
-// Load a dictionary from the custom dictionary file
-func newDictionaryCustom() (*Dictionary, error) {
-	customFile, err := os.Open(customDictPath)
+// Load a dictionary from a file
+func newDictionaryFile(path string) (*Dictionary, error) {
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
-	defer customFile.Close()
+	defer file.Close()
 
 	dict := &Dictionary{
 		words: make([]string, 0, 1024),
 		size:  1,
 		seed:  0,
 	}
-	dict.readIn(customFile)
-	return dict, nil
-}
-
-// Load a dictionary from the *nix builtin dictionary
-func newDictionarySystem() (*Dictionary, error) {
-	dictFile, err := os.Open("/usr/share/dict/words")
-	if err != nil {
-		return nil, err
-	}
-	defer dictFile.Close()
-
-	dict := &Dictionary{
-		words: make([]string, 0, 1024),
-		size:  1,
-		seed:  0,
-	}
-	dict.readIn(dictFile)
+	dict.readIn(file)
 	return dict, nil
 }
 
