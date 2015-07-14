@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/bmats/data-to-words/dict"
 	"io"
 	"os"
@@ -9,12 +10,23 @@ import (
 )
 
 var (
-	sizeParam  = flag.Uint("size", 0, "The dictionary size. Use 0 to select the maximum")
+	sizeParam  = flag.Uint("size", 0, "Dictionary size. 0 to select the maximum")
 	seedParam  = flag.Int("seed", 0, "Seed for choosing words")
 	delimParam = flag.String("delim", " ", "Word delimiter")
 )
 
+func usage() {
+	fmt.Println("data-to-words 0.1.0")
+	fmt.Printf("Usage: %s [options] [data string]\n\n", os.Args[0])
+
+	fmt.Println("Pipe some bytes to me or pass bytes to me as an argument.\n")
+
+	fmt.Println("Options:")
+	flag.PrintDefaults()
+}
+
 func main() {
+	flag.Usage = usage
 	flag.Parse()
 
 	dict, err := dict.NewDictionary()
@@ -38,9 +50,9 @@ func main() {
 	}
 
 	err = dict.Translate(reader, os.Stdout, *delimParam)
-	if err != nil {
-		os.Stderr.WriteString(err.Error())
-		os.Stderr.WriteString("\n")
+	if err == nil {
+		fmt.Println()
+	} else {
+		fmt.Fprintln(os.Stderr, err)
 	}
-	os.Stdout.WriteString("\n")
 }
